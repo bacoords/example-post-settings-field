@@ -34,7 +34,7 @@ add_action( 'init', __NAMESPACE__ . '\register_page_meta_settings' );
 
 
 /**
- * Add body class for transparent header
+ * Add body class if post has custom setting.
  *
  * @param array $classes The body classes.
  * @return array
