@@ -21,7 +21,7 @@ namespace WPDev\ExamplePostSettingsField;
 function register_page_meta_settings() {
 	register_meta(
 		'post',
-		'_wpdev_has_custom_setting',
+		'wpdev_has_custom_setting',
 		array(
 			'show_in_rest' => true,
 			'single'       => true,
@@ -33,6 +33,7 @@ add_action( 'init', __NAMESPACE__ . '\register_page_meta_settings' );
 
 
 
+
 /**
  * Add body class if post has custom setting.
  *
@@ -41,7 +42,7 @@ add_action( 'init', __NAMESPACE__ . '\register_page_meta_settings' );
  */
 function filter_body_class_for_header( $classes ) {
 	if ( is_singular( 'post' ) ) {
-		$has_custom_setting = get_post_meta( get_the_ID(), '_wpdev_has_custom_setting', true );
+		$has_custom_setting = get_post_meta( get_the_ID(), 'wpdev_has_custom_setting', true );
 		if ( $has_custom_setting ) {
 			$classes[] = 'has-custom-setting';
 		}

@@ -22,6 +22,26 @@ module.exports = window["wp"]["components"];
 
 /***/ }),
 
+/***/ "@wordpress/core-data":
+/*!**********************************!*\
+  !*** external ["wp","coreData"] ***!
+  \**********************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["coreData"];
+
+/***/ }),
+
+/***/ "@wordpress/data":
+/*!******************************!*\
+  !*** external ["wp","data"] ***!
+  \******************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["data"];
+
+/***/ }),
+
 /***/ "@wordpress/edit-post":
 /*!**********************************!*\
   !*** external ["wp","editPost"] ***!
@@ -149,6 +169,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _wordpress_core_data__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/core-data */ "@wordpress/core-data");
+/* harmony import */ var _wordpress_core_data__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_7__);
+
+
 
 
 
@@ -158,25 +184,30 @@ __webpack_require__.r(__webpack_exports__);
 const WPDevPageSettings = function () {
   const [checked, setChecked] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useState)(false);
 
-  // Confirm we're on the 'post' post type
-  const postType = wp.data.select("core/editor").getCurrentPostType();
+  // Get the current post type.
+  const postType = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_7__.useSelect)(select => {
+    return select("core/editor").getCurrentPostType();
+  });
+
+  // If the post type is not "post", return null and disable the panel.
   if (postType !== "post") {
     return null;
   }
 
-  // Get the current post meta
-  const meta = wp.data.select("core/editor").getEditedPostAttribute("meta");
+  // Get the current post meta.
+  const [meta, setMeta] = (0,_wordpress_core_data__WEBPACK_IMPORTED_MODULE_6__.useEntityProp)("postType", "post", "meta");
+
+  // Update the meta value.
   const toggleHasCustomSetting = function (value) {
-    console.log(value);
-    wp.data.dispatch("core/editor").editPost({
-      meta: {
-        _wpdev_has_custom_setting: value
-      }
+    setMeta({
+      wpdev_has_custom_setting: value
     });
     setChecked(value);
   };
+
+  // Set the checkbox to checked if the meta value is true.
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useEffect)(() => {
-    if (meta._wpdev_has_custom_setting) {
+    if (meta.wpdev_has_custom_setting) {
       setChecked(true);
     }
   }, []);
